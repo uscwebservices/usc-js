@@ -8,21 +8,18 @@
 //
 /*jslint devel: true, node: true, maxerr: 50, indent: 4,  vars: true, sloppy: true */
 
-(function (global) {
-    "use strict";
-    var USC = {};
-    
-    var strToDate = function (date_string) {
+var USC = {
+    strToDate: function (date_string) {
         var reRelativeDate = /now|[\-+0-9]+\s+(day|month|year)/i,
             toks,
             offset,
             unit,
             now = new Date();
-
+    
         if (date_string === undefined) {
             date_string = "";
         }
-
+    
         if (date_string.match(reRelativeDate)) {
             if (date_string.toLowerCase("now") === true || date_string.toLowerCase("today") === true) {
                 return now;
@@ -51,44 +48,40 @@
             return now;
         }
         return new Date(date_string);
-    };
-    
-    var toYYYYMMDD = function (dateObj, use_UTC) {
-        var dt;
-        
-        if (dateObj instanceof Date) {
-            dt = {
-                YYYY: dateObj.getFullYear(),
-                MM: (dateObj.getMonth() + 1),
-                DD: dateObj.getDate(),
-                toString: function () {
-                    var mm = "0" + this.MM,
-                        dd = "0" + this.DD;
-                    mm = mm.substr(mm.length - 2);
-                    dd = dd.substr(dd.length - 2);
-                    return [this.YYYY, mm, dd].join("-");
+    },
+
+    sqlDate: function (dateObj, use_UTC) {
+        var dt = {
+            fromDate: function (dateObj, use_UTC) {
+                if (use_UTC === undefined ||
+                        use_UTC === false) {
+                    this.YYYY = dateObj.getFullYear();
+                    this.MM = (dateObj.getMonth() + 1);
+                    this.DD =  dateObj.getDate();
+                } else if (use_UTC === true) {
+                    this.YYYY = dateObj.getUTCFullYear();
+                    this.MM = dateObj.getUTCMonth() + 1;
+                    this.DD = dateObj.getUTCDate();
                 }
-            };
-    
-            if (use_UTC === true) {
-                dt.YYYY = dateObj.getUTCFullYear();
-                dt.MM = dateObj.getUTCMonth() + 1;
-                dt.DD = dateObj.getUTCDate();
+            },
+            toString: function () {
+                var mm = "0" + this.MM,
+                    dd = "0" + this.DD;
+                mm = mm.substr(mm.length - 2);
+                dd = dd.substr(dd.length - 2);
+                return [this.YYYY, mm, dd].join("-");
             }
+        };
+
+        if (dateObj instanceof Date) {
+            dt.fromDate(dateObj, use_UTC);
         } else {
-            dt = strToDate(dateObj);
+            dt.fromDate(this.strToDate(dateObj));
         }
         return dt.toString();
-    };
-
-    USC.toYYYYMMDD = toYYYYMMDD;
-    USC.strToDate = strToDate;
-    global.USC = USC;
-        
-    if (global.exports === undefined) {
-        global.exports = {};
     }
-    
-    global.exports.USC = USC;
-	return global;
-}(this));
+};
+
+if (exports !== undefined) {
+    exports.USC = USC;
+}
