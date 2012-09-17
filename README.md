@@ -13,10 +13,10 @@ usc-js will work as a NodeJS module.
     var USC = require("usc").USC;
     
     // Should output today's date in a YYYY-MM-DD format
-    console.log(USC.toYYYYMMDD(new Date()));
+    console.log(USC.sqlDate(new Date()));
     
     // Should output next year's date in YYYY-MM-DD format
-    console.log(USC.toYYYYMMDD("+1 year");
+    console.log(USC.sqlDate("+1 year");
 ```
 
 ## In a web page
@@ -33,10 +33,10 @@ You include the _usc.js_ file in then it should be available to use as the USC o
     <body>
         <script>
             document.write("Should output today's date in a YYYY-MM-DD format.<br />");
-            document.write(USC.toYYYYMMDD(new Date()));
+            document.write(USC.sqlDate(new Date()));
             
             document.write("Plus one year.<br />");
-            document.write(USC.toYYYYMMDD("+1 year"));
+            document.write(USC.sqlDate("+1 year"));
         </script>
     </body>
     </html>
