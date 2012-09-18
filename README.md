@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/uscwebservices/usc-js.png)](http://travis-ci.org/uscwebservices/usc-js)
 usc-js
 =======
 
