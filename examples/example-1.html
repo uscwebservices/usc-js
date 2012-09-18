@@ -16,16 +16,8 @@
         var displayJSON = function (json) {
             document.write("<pre>" + JSON.stringify(json) + "</pre>");
         };
-
-        var url = ["http://web-app.usc.edu/ws/url-cache/api/ecal3/summaries/32"];
-        
-        url.push(USC.sqlDate("today"));
-        url.push(USC.sqlDate("+1 year"));
-        url.push("?callback=displayJSON");
-        console.log("DEBUB url:", url);
-        USC.getJSON(url.join("/"), displayJSON);
 	</script>
 	<!-- <script src="http://web-app.usc.edu/ws/eo3/api/details/32?callback=displayJSON"></script> -->
-	<!-- <script src="http://web-app.usc.edu/ws/url-cache/api/ecal3/summaries/32/2012-09-17/2013-09-17?callback=displayJSON"></script> -->
+	<script src="http://web-app.usc.edu/ws/url-cache/api/ecal3/summaries/32/2012-09-17/2013-09-17?callback=displayJSON"></script>
 </body>
 </html>

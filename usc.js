@@ -168,42 +168,6 @@ var http = require("http");
                 dt.fromDate(this.relativeDateTime(dateObj, seedDate));
             }
             return dt.toString();
-        },
-
-        getJSON: function (url, callback) {
-            var httpRequest;
-
-            if (this.window === undefined) {
-                // If we're in NodeJS get content via http.Client
-                http.get(url, function (res) {
-                    var buf = [], error;
-                    
-                    res.on("error", function (err) {
-                        error = err;
-                    });
-                    res.on("data", function (data) {
-                        buf.push(data.toString());
-                    });
-                    
-                    res.on("end", function () {
-                        callback(error, buf.join(""));
-                    });
-                    
-                }).on('error', function (e) {
-                    callback(e.message);
-                });
-            } else {
-                // If we're running in the browser get content via XHR
-                if (window.XMLHttpRequest === undefined) {
-                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
-                } else {
-                    httpRequest = new XMLHttpRequest();
-                }
-
-                httpRequest.onreadystatechange = callback;
-                httpRequest.open('GET', url, true);
-                httpRequest.send(null);
-            }
         }
     };
 
