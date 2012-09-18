@@ -9,12 +9,18 @@
 /*jslint devel: true, node: true, maxerr: 50, indent: 4,  vars: true, sloppy: true */
 
 var USC = {
-    strToDate: function (date_string) {
+    relativeDate: function (date_string, seedDate) {
         var reRelativeDate = /now|[\-+0-9]+\s+(day|month|year)/i,
             toks,
             offset,
             unit,
+            now;
+
+	if (seedDate === undefined) {
             now = new Date();
+	} else if (seedDate instanceof Date) {
+	    now = seedDate;
+	}
     
         if (date_string === undefined) {
             date_string = "";
@@ -76,7 +82,7 @@ var USC = {
         if (dateObj instanceof Date) {
             dt.fromDate(dateObj, use_UTC);
         } else {
-            dt.fromDate(this.strToDate(dateObj));
+            dt.fromDate(this.relativeDate(dateObj));
         }
         return dt.toString();
     }

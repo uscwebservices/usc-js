@@ -25,7 +25,7 @@ harness.push({callback: function () {
 
     assert.ok(USC, "Should have a USC object create.");
     assert.equal(typeof USC.sqlDate, "function", "Should have a sqlDate method");
-    assert.ok(typeof USC.strToDate, "function", "Should have a strToDate method");
+    assert.ok(typeof USC.relativeDate, "function", "Should have a relativeDate method");
 
     s = USC.sqlDate(test_date);
     expected_s = "2012-09-17";
