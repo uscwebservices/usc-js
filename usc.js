@@ -30,6 +30,8 @@
                 if (date_string.toLowerCase("now") === true ||
                         date_string.toLowerCase("today") === true) {
                     return now;
+                } else if (date_string.indexOf(" ") < 0) {
+                    throw "Not a relative date string:" + date_string;
                 }
                 toks = date_string.split(/\s+/, 2);
                 offset = Number(toks[0]);
