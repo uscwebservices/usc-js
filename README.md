@@ -16,7 +16,13 @@ usc-js will work as a NodeJS module.
     console.log(USC.sqlDate(new Date()));
     
     // Should output next year's date in YYYY-MM-DD format
-    console.log(USC.sqlDate("+1 year");
+    console.log(USC.sqlDate("+1 year"));
+    
+    // If you need a full YYYY-MM-DD HH:MM:SS
+    console.log(USC.sqlDateTime(new Date()));
+
+    // If you need a full YYYY-MM-DD HH:MM:SS with +1 Hour
+    console.log(USC.sqlDateTime("+1 year", false, new Date()));
 ```
 
 ## In a web page

@@ -7,6 +7,8 @@
 // Version 0.0.1 (Sept. 2012)
 //
 /*jslint devel: true, node: true, maxerr: 50, indent: 4,  vars: true, sloppy: true */
+var http = require("http");
+
 (function (global) {
     var USC = {
         relativeDateTime: function (date_string, seedDate) {
@@ -166,43 +168,46 @@
                 dt.fromDate(this.relativeDateTime(dateObj, seedDate));
             }
             return dt.toString();
-        }
-    };
+        },
 
-    // If we're in NodeJS get content via http.Client
-    // If we're running in the browser get content via XHR
-    if (global.window === undefined) {
-        (function (global) {
-            var http = require("http");
-
-            global.getJSON = function (url, callback) {
-                http.get(url, function (res) {
-                    console.log("Got response: " + res);
-                    callback(res.data);
-                }).on('error', function (e) {
-                    console.error("Got error: " + e.message);
-                    throw "Got error: " + e.message;
-                });
-            };
-        }(global));
-    } else {
-        (function (global) {
+        getJSON: function (url, callback) {
             var httpRequest;
 
-            if (window.XMLHttpRequest === undefined) {
-                httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+            if (this.window === undefined) {
+                // If we're in NodeJS get content via http.Client
+                http.get(url, function (res) {
+                    var buf = [], error;
+                    
+                    res.on("error", function (err) {
+                        error = err;
+                    });
+                    res.on("data", function (data) {
+                        buf.push(data.toString());
+                    });
+                    
+                    res.on("end", function () {
+                        callback(error, buf.join(""));
+                    });
+                    
+                }).on('error', function (e) {
+                    callback(e.message);
+                });
             } else {
-                httpRequest = new XMLHttpRequest();
-            }
+                // If we're running in the browser get content via XHR
+                if (window.XMLHttpRequest === undefined) {
+                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                } else {
+                    httpRequest = new XMLHttpRequest();
+                }
 
-            global.getJSON = function (url, callback) {
                 httpRequest.onreadystatechange = callback;
                 httpRequest.open('GET', url, true);
                 httpRequest.send(null);
-            };
-        }(global));
-    }
-        
+            }
+        }
+    };
+
+
     global.USC = USC;
     if (global.exports === undefined) {
         global.exports = {};

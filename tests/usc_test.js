@@ -75,7 +75,7 @@ harness.push({callback: function () {
         hh, ":", mm, ":", ss
     ].join("");
     assert.equal(s, expected_s, "\n" + s + "\n" + expected_s);
-}, label: "Test sqlDateTime methods on the USC object."});
+}, label: "Test sqlDateTime(), relativeDateTime() methods on the USC object."});
 
 // Test sqlDate()
 harness.push({callback: function () {
@@ -146,8 +146,25 @@ harness.push({callback: function () {
     assert.equal(s, expected_s, "\n" + s + "\n" + expected_s);
 }, label: "Test sqlDate() methods on the USC object."});
 
+// Test getJSON()
+harness.push({callback: function () {
+    var get_data = false;
+    USC.getJSON("http://web-app.usc.edu/ws/eo3/api/details/32",
+        function (err, data) {
+            if (err) {
+                throw err;
+            }
+            //console.log("DEBUG", data);
+            get_data = true;
+        });
+
+    setTimeout(function () {
+        assert.ok(get_data, "Data retrieved fail.");
+    }, 5000);
+}, label: "Test getJSON()"});
+
 if (require.main === module) {
-    harness.RunIt(path.basename(module.filename), 10, true);
+    harness.RunIt(path.basename(module.filename), 1, true);
 } else {
     exports.RunIt = harness.RunIt;
 }
