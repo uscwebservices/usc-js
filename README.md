@@ -2,7 +2,7 @@
 usc-js
 =======
 
-usc-js is a library of useful functions smoothing the access to USC Web Services APIs.
+_usc.js_ provides the USC JavaScript object for integration with public API and useful utility functions.
 
 # Examples
 
