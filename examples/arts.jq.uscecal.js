@@ -21,7 +21,9 @@
 			base.options = $.extend({},$.uscecal.defaultOptions, options);
      
 			// base path for the eo3 api
-			var restURL = 'http://web-app.usc.edu/ws/eo3/api/';
+			//var restURL = 'http://web-app.usc.edu/ws/eo3/api/';
+			var restURL = 'http://web-app.usc.edu/ws/url-cache/api/ecal3/';
+			
 			// if the detail page is requested grab the event_id from the URL
 			if (base.options.view=="detail") {
 				var event_id = base.getUrlVars()["event_id"];
@@ -32,7 +34,7 @@
 					return false;
 				}
 			} else {
-				restURL += base.options.view+'/'+base.cal_id+'/'+encodeURIComponent(USC.sqlDate(base.options.startDate))+'/'+encodeURIComponent(USC.sqlDate(base.options.endDate))+'/';
+				base.options.view+'/'+base.cal_id+'/'+encodeURIComponent(USC.sqlDate(base.options.startDate))+'/'+encodeURIComponent(USC.sqlDate(base.options.endDate))+'/';
 			}		
 
 			if (base.options.jsonp) restURL += '?callback=?';
@@ -160,7 +162,15 @@
 		base.parseSchedule = function(obj) {
 			var schedule = '<span class="dates">';
 			// format the dates
-			var scheduleArr = obj.split(": ");
+			var scheduleArr;
+            
+            try {
+                scheduleArr = obj.split(": ");
+            } catch (err) {
+                console.log(err, JSON.stringify(obj));
+                return "<pre>" + err + "</pre>";
+            }
+            
 			if(scheduleArr[0].indexOf("-")!=-1){
 				var datesArr = scheduleArr[0].split("-");
 				schedule += base.formatDate(datesArr[0])+' through '+base.formatDate(datesArr[1]);
