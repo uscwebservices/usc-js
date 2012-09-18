@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>USC JavaScript object Demo</title>
+	<script src="usc.js"></script>
+</head>
+<body>
+	<script>
+		document.write("Should output today's date in a YYYY-MM-DD format.<br />");
+		document.write(USC.sqlDate(new Date()));
+		
+		document.write("<br />Plus one year.<br />");
+		document.write(USC.sqlDate("+1 year"));
+	</script>
+</body>
+</html>
