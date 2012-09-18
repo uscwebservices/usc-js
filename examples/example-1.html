@@ -11,6 +11,18 @@
 		
 		document.write("<br />Plus one year.<br />");
 		document.write(USC.sqlDate("+1 year"));
+		var displayJSON = function (json) {
+			document.write("<pre>" + JSON.stringify(json) + "</pre>");
+		};
+        
+        var httpRequest;
+        if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+            httpRequest = new XMLHttpRequest();
+        } else if (window.ActiveXObject) { // IE 8 and older
+            httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+        }
 	</script>
+	<!-- <script src="http://web-app.usc.edu/ws/eo3/api/details/32?callback=displayJSON"></script>-->
+	<script src="http://web-app.usc.edu/ws/url-cache/api/ecal3/summaries/32/2012-09-17/2013-09-17?callback=displayJSON"></script>
 </body>
 </html>
