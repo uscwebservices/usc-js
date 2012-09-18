@@ -7,8 +7,6 @@
 // Version 0.0.1 (Sept. 2012)
 //
 /*jslint devel: true, node: true, maxerr: 50, indent: 4,  vars: true, sloppy: true */
-var http = require("http");
-
 (function (global) {
     var USC = {
         relativeDateTime: function (date_string, seedDate) {
