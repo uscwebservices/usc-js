@@ -1,11 +1,11 @@
-//
-// usc.js - JavaScript library of helpful things for USC resources.
-// @author: R. S. Doiel <rsdoiel@usc.edu>
-// Examples and documentation: https://github.com/uscwebservices/usc-js
-// copyright (c) 2012 University of Southern California
-// all rights reserved
-// Version 0.0.1 (Sept. 2012)
-//
+/**
+ * usc.js - JavaScript library of helpful things for USC resources.
+ * @author: R. S. Doiel <rsdoiel@usc.edu>
+ * Examples and documentation: https://github.com/uscwebservices/usc-js
+ * copyright (c) 2012 University of Southern California
+ * all rights reserved
+ * Version 0.0.1 (Sept. 2012)
+ */
 /*jslint devel: true, node: true, maxerr: 50, indent: 4,  vars: true, sloppy: true */
 (function (global) {
     var USC = {
