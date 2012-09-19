@@ -351,5 +351,4 @@
 			(new $.uscecal(this, cal_id, options));
 		});
 	};
-    
 }(jQuery));
