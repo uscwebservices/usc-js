@@ -166,7 +166,23 @@ harness.push({callback: function () {
 			"eo3", "api");
 	expected_s = "//web-app.usc.edu/ws/eo3/api";
     assert.equal(s, expected_s, "\n" + s + "\n" + expected_s);	
-    
+
+	USC.path.prefix = 'https:';
+	USC.path.suffix = 'index.html';
+    USC.path.delimiter = "/";
+	s = USC.path.join("/web-app.usc.edu", "ws",
+			"eo3", "api");
+	expected_s = "https://web-app.usc.edu/ws/eo3/api/index.html";
+    assert.equal(s, expected_s, "\n" + s + "\n" + expected_s);	
+
+	USC.path.prefix = 'https:';
+	USC.path.suffix = "";
+    USC.path.delimiter = "/";
+	s = USC.path.join("/web-app.usc.edu", "ws",
+			"eo3", "api");
+	expected_s = "https://web-app.usc.edu/ws/eo3/api/";
+    assert.equal(s, expected_s, "\n" + s + "\n" + expected_s);	
+
 }, label: "Test USC object's path processing"});
 
 if (require.main === module) {

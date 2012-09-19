@@ -174,8 +174,14 @@
         
         path: {
         	delimiter: '/',
+        	prefix: null,
+        	suffix: null,
         	join: function () {
         		var i, start, end, parts = [];
+        		
+        		if (this.prefix !== null) {
+        			parts.push(this.prefix);
+        		}
         		
         		for (i = 0; i < arguments.length; i += 1) {
         			start = 0;
@@ -193,6 +199,9 @@
         			} else {
         				parts.push(arguments[i]);
         			}
+        		}
+        		if (this.suffix !== null) {
+        			parts.push(this.suffix);
         		}
         		return parts.join(this.delimiter);
         	}
