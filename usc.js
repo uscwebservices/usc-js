@@ -180,7 +180,8 @@
         		for (i = 0; i < arguments.length; i += 1) {
         			start = 0;
         			end = 0;
-        			if (arguments[i].indexOf(this.delimiter) === 0) {
+        			if (arguments[i].indexOf(this.delimiter) === 0 &&
+        					i > 0) {
         				start = 1;
         			}
         			if (arguments[i].lastIndexOf(this.delimiter) ===

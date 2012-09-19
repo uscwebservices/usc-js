@@ -159,7 +159,14 @@ harness.push({callback: function () {
 	s = USC.path.join("http://web-app.usc.edu", "ws",
 			"eo3", "api");
 	expected_s = "http://web-app.usc.edu\\ws\\eo3\\api";
+    assert.equal(s, expected_s, "\n" + s + "\n" + expected_s);
+    
+    USC.path.delimiter = "/";
+	s = USC.path.join("//web-app.usc.edu", "ws",
+			"eo3", "api");
+	expected_s = "//web-app.usc.edu/ws/eo3/api";
     assert.equal(s, expected_s, "\n" + s + "\n" + expected_s);	
+    
 }, label: "Test USC object's path processing"});
 
 if (require.main === module) {
