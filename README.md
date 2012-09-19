@@ -44,6 +44,11 @@ You include the _usc.js_ file in then it should be available to use as the USC o
             
             document.write("Plus one year.<br />");
             document.write(USC.sqlDate("+1 year"));
+            
+            document.write("Calculating a URL by parts:" +
+            	USC.path.join("http://usc.edu", "ws", "eo3", "api", "help")
+            );
+            document.write("That should have read<pre>http://usc.edu/ws/eo3/api/help</pre>");
         </script>
     </body>
     </html>
