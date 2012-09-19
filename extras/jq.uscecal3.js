@@ -9,7 +9,7 @@
 /*jslint sloppy: true, css: true, cap: true, on: true, fragment: true, browser: true, devel: true, indent: 4, maxlen: 80 */
 /*global USC, jQuery */
 
-(function ($) {
+(function ($, window, undefined) {
 	$.uscecal = function (el, cal_id, options) {
 		var base = this;
 		base.$el = $(el);
@@ -351,4 +351,4 @@
 			(new $.uscecal(this, cal_id, options));
 		});
 	};
-}(jQuery));
+}(jQuery, window));

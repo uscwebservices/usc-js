@@ -5,6 +5,8 @@
  * copyright (c) 2012 University of Southern California
  * all rights reserved
  * Version 0.0.1 (Sept. 2012)
+ *
+ * To use in a web browser load usc.js then load usc.browser.js
  */
 /*jslint devel: true, node: true, maxerr: 50, indent: 4,  vars: true, sloppy: true */
 (function (global) {
@@ -168,6 +170,31 @@
                 dt.fromDate(this.relativeDateTime(dateObj, seedDate));
             }
             return dt.toString();
+        },
+        
+        path: {
+        	delimiter: '/',
+        	join: function () {
+        		var i, start, end, parts = [];
+        		
+        		for (i = 0; i < arguments.length; i += 1) {
+        			start = 0;
+        			end = 0;
+        			if (arguments[i].indexOf(this.delimiter) === 0) {
+        				start = 1;
+        			}
+        			if (arguments[i].lastIndexOf(this.delimiter) ===
+        				(arguments[i].length - 1)) {
+        				end = arguments[i].length - 2;
+        			}
+        			if (start !== 0 || end !== 0) {
+        				parts.push(arguments[i].substr(start, end));
+        			} else {
+        				parts.push(arguments[i]);
+        			}
+        		}
+        		return parts.join(this.delimiter);
+        	}
         }
     };
 

@@ -146,6 +146,22 @@ harness.push({callback: function () {
     assert.equal(s, expected_s, "\n" + s + "\n" + expected_s);
 }, label: "Test sqlDate() methods on the USC object."});
 
+// Test USC object's path processing.
+harness.push({callback: function () {
+	var s, expected_s;
+	
+	s = USC.path.join("http://web-app.usc.edu", "ws",
+			"eo3", "api");
+	expected_s = "http://web-app.usc.edu/ws/eo3/api";
+    assert.equal(s, expected_s, "\n" + s + "\n" + expected_s);	
+
+	USC.path.delimiter = '\\';
+	s = USC.path.join("http://web-app.usc.edu", "ws",
+			"eo3", "api");
+	expected_s = "http://web-app.usc.edu\\ws\\eo3\\api";
+    assert.equal(s, expected_s, "\n" + s + "\n" + expected_s);	
+}, label: "Test USC object's path processing"});
+
 if (require.main === module) {
     harness.RunIt(path.basename(module.filename), 1, true);
 } else {
