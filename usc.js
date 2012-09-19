@@ -173,38 +173,36 @@
         },
         
         path: {
-        	delimiter: '/',
-        	prefix: null,
-        	suffix: null,
-        	join: function () {
-        		var i, start, end, parts = [];
-        		
-        		if (this.prefix !== null) {
-        			parts.push(this.prefix);
-        		}
-        		
-        		for (i = 0; i < arguments.length; i += 1) {
-        			start = 0;
-        			end = 0;
-        			if (arguments[i].indexOf(this.delimiter) === 0 &&
-        					i > 0) {
-        				start = 1;
-        			}
-        			if (arguments[i].lastIndexOf(this.delimiter) ===
-        				(arguments[i].length - 1)) {
-        				end = arguments[i].length - 2;
-        			}
-        			if (start !== 0 || end !== 0) {
-        				parts.push(arguments[i].substr(start, end));
-        			} else {
-        				parts.push(arguments[i]);
-        			}
-        		}
-        		if (this.suffix !== null) {
-        			parts.push(this.suffix);
-        		}
-        		return parts.join(this.delimiter);
-        	}
+            delimiter: '/',
+            prefix: null,
+            suffix: null,
+            join: function () {
+                var i, start, end, parts = [];
+
+                if (this.prefix !== null) {
+                    parts.push(this.prefix);
+                }
+
+                for (i = 0; i < arguments.length; i += 1) {
+                    start = 0;
+                    end = 0;
+                    if (arguments[i].indexOf(this.delimiter) === 0 && i > 0) {
+                        start = 1;
+                    }
+                    if (arguments[i].lastIndexOf(this.delimiter) === (arguments[i].length - 1)) {
+                        end = arguments[i].length - 2;
+                    }
+                    if (start !== 0 || end !== 0) {
+                        parts.push(arguments[i].substr(start, end));
+                    } else {
+                        parts.push(arguments[i]);
+                    }
+                }
+                if (this.suffix !== null) {
+                    parts.push(this.suffix);
+                }
+                return parts.join(this.delimiter);
+            }
         }
     };
 

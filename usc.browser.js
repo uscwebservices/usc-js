@@ -11,18 +11,19 @@
 /*jslint sloppy: true, css: true, cap: true, on: true, fragment: true, browser: true, devel: true, indent: 4, maxlen: 80 */
 /*global USC, jQuery */
 
-(function (global, undefined) {
+(function (global) {
 	var USC = global.USC;
 	
 	/*!
 	 * USC Events Calendar jQuery Plugin
 	 * By Cameron Bates
-	 * Examples and documentation at: http://web-app.usc.edu/ws/eo3/help/jqplugin
+	 * Examples and documentation at: 
+     *     http://web-app.usc.edu/ws/eo3/help/jqplugin
 	 * Copyright (c) 2011 University of Southern California
 	 * Version: 1.0 (October 2011)
 	 * Dual licensed under the MIT and GPL licenses.
 	 */
-	USC.jq = function ($, window, undefined) {
+	USC.jq = function ($, window) {
 		$.uscecal = function (el, cal_id, options) {
 			var base = this;
 			base.$el = $(el);
@@ -39,13 +40,23 @@
 					cal_id = 32;
 				}
 				base.cal_id = cal_id;
+                if (cal_id === 32) {
+                    $.uscecal.defaultsOptions.use_cache = true;
+                } else {
+                    $.uscecal.defaultsOptions.use_cache = false;
+                }
 	
 				base.options = $.extend({}, $.uscecal.defaultOptions, options);
 	
 				// base path for the eo3 api
-				restURL = 'https://web-app.usc.edu/ws/url-cache/api/ecal3/';
-				
-				// if the detail page is requested grab the event_id from the URL
+                if (base.options.use_cache === true) {
+                    restURL = base.options.cached_url;
+                } else {
+                    restURL = base.options.api_url;
+				}
+
+				// if the detail page is requested grab 
+                // the event_id from the URL
 				if (base.options.view === "detail") {
 					event_id = base.getUrlVars().event_id;
 					if (parseInt(event_id, 10)) {
@@ -67,7 +78,8 @@
 				jsonStr = '{';
 				jsonStr += '"limit":"' + base.options.limit + '"';
 				if (base.options.categories) {
-					jsonStr += ', "categories":"' + base.options.categories + '"';
+					jsonStr += ', "categories":"' +
+                        base.options.categories + '"';
 				}
 				jsonStr += '}';
 				jsonOpts = jQuery.parseJSON(jsonStr);
@@ -77,6 +89,8 @@
 					var events = [], imgURL, titleNoHTML, itemHTML;
 	
 					// format the data according to the view requested
+                    // FIXME: The views should be a hash with a rendering
+                    // function attached as a callback.
 					switch (base.options.view) {
 					case 'highlights':
 						$.each(data, function (i, item) {
@@ -355,7 +369,10 @@
 			dateFormat: false,
 			imgSize: 'image',
 			categories: false,
-			jsonp: true
+			jsonp: true,
+            use_cache: false,
+            cached_url: '//web-app.usc.edu/ws/url-cache/api/ecal3/',
+            api_url: '//web-app.usc.edu/ws/eo3/api/'
 		};
 		
 		$.fn.uscecal = function (cal_id, options) {
