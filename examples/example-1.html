@@ -6,16 +6,16 @@
 </head>
 <body>
 	<script>
-        /*jslint css: true, cap: true, on: true, fragment: true, browser: true, devel: true */
-        /*properties USC, window, document */
-        document.write("Should output today's date in a YYYY-MM-DD format.<br />");
-        document.write(USC.sqlDate(new Date()));
-        
-        document.write("<br />Plus one year.<br />");
-        document.write(USC.sqlDate("+1 year"));
-        var displayJSON = function (json) {
-            document.write("<pre>" + JSON.stringify(json) + "</pre>");
-        };
+		/*jslint css: true, cap: true, on: true, fragment: true, browser: true, devel: true */
+		/*properties USC, window, document */
+		document.write("Should output today's date in a YYYY-MM-DD format.<br />");
+		document.write(USC.sqlDate(new Date()));
+		
+		document.write("<br />Plus one year.<br />");
+		document.write(USC.sqlDate("+1 year"));
+		var displayJSON = function (json) {
+			document.write("<pre>" + JSON.stringify(json) + "</pre>");
+		};
 	</script>
 	<!-- <script src="http://web-app.usc.edu/ws/eo3/api/details/32?callback=displayJSON"></script> -->
 	<script src="http://web-app.usc.edu/ws/url-cache/api/ecal3/summaries/32/2012-09-17/2013-09-17?callback=displayJSON"></script>
