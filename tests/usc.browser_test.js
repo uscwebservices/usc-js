@@ -16,7 +16,7 @@ try {
 } catch (err) {
 	console.log("usc.browser_test.js runs in a web browser.");
 	process.exit(1);
-//	throw "usc.browser_test.js runs in a web browser.";
+	// throw "usc.browser_test.js runs in a web browser.";
 }
 
 // Getting that objects are initialized.
@@ -25,7 +25,7 @@ harness.push({callback: function () {
 	assert.strictEqual(typeof USC, "object", "USC should be an object.");
 	assert.ok(USC.jq, "Should have USC.jq defined.");
 	assert.strictEqual(typeof USC.jq, "function",
-                       "USC.jq should be a function.");
+						"USC.jq should be a function.");
 }, label: "Getting that objects are initialized."});
 
 
