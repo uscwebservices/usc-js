@@ -8,7 +8,8 @@
  *
  * To use in a web browser load usc.js then load usc.browser.js
  */
-/*jslint devel: true, node: true, maxerr: 50, indent: 4,  vars: true, sloppy: true */
+/*jslint devel: true, node: true, maxerr: 50, indent: 4,  vars: true, 
+ sloppy: true */
 (function (global) {
     var USC = {
         relativeDateTime: function (date_string, seedDate) {

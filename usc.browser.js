@@ -8,22 +8,25 @@
  *
  * To use in a web browser load usc.js then load usc.browser.js
  */
-/*jslint sloppy: true, css: true, cap: true, on: true, fragment: true, browser: true, devel: true, indent: 4, maxlen: 80 */
+/*jslint sloppy: true, css: true, cap: true, on: true, fragment: true, 
+  browser: true, devel: true, indent: 4, maxlen: 80 */
 /*global USC, jQuery */
 
 (function (global) {
 	var USC = global.USC;
 	
-	/*!
-	 * USC Events Calendar jQuery Plugin
-	 * By Cameron Bates
-	 * Examples and documentation at: 
+    // Handing a jq object off of USC
+    USC.jq = {};
+    /*!
+     * USC Events Calendar jQuery Plugin
+     * By Cameron Bates
+     * Examples and documentation at: 
      *     http://web-app.usc.edu/ws/eo3/help/jqplugin
-	 * Copyright (c) 2011 University of Southern California
-	 * Version: 1.0 (October 2011)
-	 * Dual licensed under the MIT and GPL licenses.
-	 */
-	USC.jq = function ($, window) {
+     * Copyright (c) 2011 University of Southern California
+     * Version: 1.0 (October 2011)
+     * Dual licensed under the MIT and GPL licenses.
+     */
+	USC.jq.ecal = function ($, window) {
 		$.uscecal = function (el, cal_id, options) {
 			var base = this;
 			base.$el = $(el);
@@ -108,8 +111,8 @@
 							}
 							itemHTML += '<' + base.options.titleElem +
 								'><a href="' + base.options.baseURL +
-								item.event_id + '">' + item.title + '</a></'
-								+ base.options.titleElem + '>';
+								item.event_id + '">' + item.title +
+                                '</a></' + base.options.titleElem + '>';
 							itemHTML += '<p class="event_date">' +
 								base.parseSchedule(item.schedule) + '</p>';
 							itemHTML += '</' + base.options.elem + '>';
@@ -138,8 +141,8 @@
 								base.parseSchedule(item.schedule) + '</p>';
 							itemHTML += '<p class="location">' +
 								base.getAddress(item) + '</p>';
-							itemHTML += '<p class="summary">' + item.summary
-								+ '</p>';
+							itemHTML += '<p class="summary">' + item.summary + 
+                            '</p>';
 							itemHTML += '</' + base.options.elem + '>';
 							events.push(itemHTML);
 						});
@@ -310,18 +313,17 @@
 			}; // end parseSchedule
 					
 			base.getImageURL = function (item) {
-				var imgURL = "";
+				var imgURL = "", 
+                    cal_id = item.calendar_id,
+                    imgSize = base.options.imgSize;
 				if (item.attachments !== undefined &&
-						item.attachments[item.calendar_id]
-							!== undefined &&
-						item.attachments[item.calendar_id][base.options.imgSize]
-							!== undefined) {
-					imgURL = item.attachments[
-						item.calendar_id
-					][base.options.imgSize].url;
+						item.attachments[cal_id] !== undefined &&
+                        item.attachments[cal_id][imgSize] !== undefined) {
+					imgURL = item.attachments[cal_id][imgSize].url;
 				} else if (item.attachments !== undefined &&
-						item.attachments[item.parent_calendar_id]
-						!== undefined &&
+						item.attachments[
+                            item.parent_calendar_id
+                        ] !== undefined &&
 						item.attachments[
 							item.parent_calendar_id
 						][base.options.imgSize] !== undefined) {
