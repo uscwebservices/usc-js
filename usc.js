@@ -12,17 +12,17 @@
  sloppy: true */
 (function (global) {
     var USC = {
-        relativeDateTime: function (date_string, seedDate) {
+        relativeDateTime: function (date_string, seed_date) {
             var reRelativeDate = /now|[\-+0-9]+\s+(day|month|year)/i,
                 toks,
                 offset,
                 unit,
                 now;
 
-            if (seedDate === undefined) {
+            if (seed_date === undefined) {
                 now = new Date();
-            } else if (seedDate instanceof Date) {
-                now = seedDate;
+            } else if (seed_date instanceof Date) {
+                now = seed_date;
             }
 
             if (date_string === undefined) {
@@ -90,20 +90,20 @@
             return new Date(date_string);
         },
 
-        sqlDate: function (dateObj, use_UTC, seedDate) {
+        sqlDate: function (date_object, use_UTC, seed_date) {
             var dt;
 
             dt = {
-                fromDate: function (dateObj, use_UTC) {
+                fromDate: function (date_object, use_UTC) {
                     if (use_UTC === undefined ||
                             use_UTC === false) {
-                        this.YYYY = dateObj.getFullYear();
-                        this.MM = (dateObj.getMonth() + 1);
-                        this.DD = dateObj.getDate();
+                        this.YYYY = date_object.getFullYear();
+                        this.MM = (date_object.getMonth() + 1);
+                        this.DD = date_object.getDate();
                     } else if (use_UTC === true) {
-                        this.YYYY = dateObj.getUTCFullYear();
-                        this.MM = dateObj.getUTCMonth() + 1;
-                        this.DD = dateObj.getUTCDate();
+                        this.YYYY = date_object.getUTCFullYear();
+                        this.MM = date_object.getUTCMonth() + 1;
+                        this.DD = date_object.getUTCDate();
                     }
                 },
                 toString: function () {
@@ -115,36 +115,36 @@
                 }
             };
 
-            if (dateObj instanceof Date) {
-                dt.fromDate(dateObj, use_UTC);
-            } else if (seedDate === undefined) {
-                dt.fromDate(this.relativeDateTime(dateObj));
+            if (date_object instanceof Date) {
+                dt.fromDate(date_object, use_UTC);
+            } else if (seed_date === undefined) {
+                dt.fromDate(this.relativeDateTime(date_object));
             } else {
-                dt.fromDate(this.relativeDateTime(dateObj, seedDate));
+                dt.fromDate(this.relativeDateTime(date_object, seed_date));
             }
             return dt.toString();
         },
 
-        sqlDateTime: function (dateObj, use_UTC, seedDate) {
+        sqlDateTime: function (date_object, use_UTC, seed_date) {
             var dt;
 
             dt = {
-                fromDate: function (dateObj, use_UTC) {
+                fromDate: function (date_object, use_UTC) {
                     if (use_UTC === undefined ||
                             use_UTC === false) {
-                        this.YYYY = dateObj.getFullYear();
-                        this.MM = (dateObj.getMonth() + 1);
-                        this.DD = dateObj.getDate();
-                        this.hh = dateObj.getHours();
-                        this.mm = dateObj.getMinutes();
-                        this.ss = dateObj.getSeconds();
+                        this.YYYY = date_object.getFullYear();
+                        this.MM = (date_object.getMonth() + 1);
+                        this.DD = date_object.getDate();
+                        this.hh = date_object.getHours();
+                        this.mm = date_object.getMinutes();
+                        this.ss = date_object.getSeconds();
                     } else if (use_UTC === true) {
-                        this.YYYY = dateObj.getUTCFullYear();
-                        this.MM = dateObj.getUTCMonth() + 1;
-                        this.DD = dateObj.getUTCDate();
-                        this.hh = dateObj.getUTCHours();
-                        this.mm = dateObj.getUTCMinutes();
-                        this.ss = dateObj.getUTCSeconds();
+                        this.YYYY = date_object.getUTCFullYear();
+                        this.MM = date_object.getUTCMonth() + 1;
+                        this.DD = date_object.getUTCDate();
+                        this.hh = date_object.getUTCHours();
+                        this.mm = date_object.getUTCMinutes();
+                        this.ss = date_object.getUTCSeconds();
                     }
                 },
                 toString: function () {
@@ -163,12 +163,12 @@
                 }
             };
 
-            if (dateObj instanceof Date) {
-                dt.fromDate(dateObj, use_UTC);
-            } else if (seedDate === undefined) {
-                dt.fromDate(this.relativeDateTime(dateObj));
+            if (date_object instanceof Date) {
+                dt.fromDate(date_object, use_UTC);
+            } else if (seed_date === undefined) {
+                dt.fromDate(this.relativeDateTime(date_object));
             } else {
-                dt.fromDate(this.relativeDateTime(dateObj, seedDate));
+                dt.fromDate(this.relativeDateTime(date_object, seed_date));
             }
             return dt.toString();
         },
