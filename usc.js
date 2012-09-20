@@ -13,7 +13,7 @@
 (function (global) {
     var USC = {
         relativeDateTime: function (date_string, seed_date) {
-            var reRelativeDate = /now|[\-+0-9]+\s+(day|month|year)/i,
+            var re_relative_date = /now|[\-+0-9]+\s+(day|month|year)/i,
                 toks,
                 offset,
                 unit,
@@ -29,7 +29,7 @@
                 date_string = "";
             }
 
-            if (date_string.match(reRelativeDate)) {
+            if (date_string.match(re_relative_date)) {
                 if (date_string.toLowerCase() === "now" ||
                         date_string.toLowerCase() === "today") {
                     return now;
@@ -190,7 +190,8 @@
                     if (arguments[i].indexOf(this.delimiter) === 0 && i > 0) {
                         start = 1;
                     }
-                    if (arguments[i].lastIndexOf(this.delimiter) === (arguments[i].length - 1)) {
+                    if (arguments[i].lastIndexOf(this.delimiter) ===
+                            (arguments[i].length - 1)) {
                         end = arguments[i].length - 2;
                     }
                     if (start !== 0 || end !== 0) {
