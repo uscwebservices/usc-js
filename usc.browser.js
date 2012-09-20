@@ -15,17 +15,17 @@
 (function (global) {
 	var USC = global.USC;
 	
-    // Handing a jq object off of USC
-    USC.jq = {};
-    /*!
-     * USC Events Calendar jQuery Plugin
-     * By Cameron Bates
-     * Examples and documentation at: 
-     *     http://web-app.usc.edu/ws/eo3/help/jqplugin
-     * Copyright (c) 2011 University of Southern California
-     * Version: 1.0 (October 2011)
-     * Dual licensed under the MIT and GPL licenses.
-     */
+	// Handing a jq object off of USC
+	USC.jq = {};
+	/*!
+	 * USC Events Calendar jQuery Plugin
+	 * By Cameron Bates
+	 * Examples and documentation at: 
+	 *	http://web-app.usc.edu/ws/eo3/help/jqplugin
+	 * Copyright (c) 2011 University of Southern California
+	 * Version: 1.0 (October 2011)
+	 * Dual licensed under the MIT and GPL licenses.
+	 */
 	USC.jq.ecal = function ($, window) {
 		$.uscecal = function (el, cal_id, options) {
 			var base = this;
@@ -43,23 +43,23 @@
 					cal_id = 32;
 				}
 				base.cal_id = cal_id;
-                if (cal_id === 32) {
-                    $.uscecal.defaultsOptions.use_cache = true;
-                } else {
-                    $.uscecal.defaultsOptions.use_cache = false;
-                }
+				if (cal_id === 32) {
+					$.uscecal.defaultsOptions.use_cache = true;
+				} else {
+					$.uscecal.defaultsOptions.use_cache = false;
+				}
 	
 				base.options = $.extend({}, $.uscecal.defaultOptions, options);
 	
 				// base path for the eo3 api
-                if (base.options.use_cache === true) {
-                    restURL = base.options.cached_url;
-                } else {
-                    restURL = base.options.api_url;
+				if (base.options.use_cache === true) {
+					restURL = base.options.cached_url;
+				} else {
+					restURL = base.options.api_url;
 				}
 
 				// if the detail page is requested grab 
-                // the event_id from the URL
+				// the event_id from the URL
 				if (base.options.view === "detail") {
 					event_id = base.getUrlVars().event_id;
 					if (parseInt(event_id, 10)) {
@@ -82,7 +82,7 @@
 				jsonStr += '"limit":"' + base.options.limit + '"';
 				if (base.options.categories) {
 					jsonStr += ', "categories":"' +
-                        base.options.categories + '"';
+						base.options.categories + '"';
 				}
 				jsonStr += '}';
 				jsonOpts = jQuery.parseJSON(jsonStr);
@@ -92,8 +92,8 @@
 					var events = [], imgURL, titleNoHTML, itemHTML;
 	
 					// format the data according to the view requested
-                    // FIXME: The views should be a hash with a rendering
-                    // function attached as a callback.
+					// FIXME: The views should be a hash with a rendering
+					// function attached as a callback.
 					switch (base.options.view) {
 					case 'highlights':
 						$.each(data, function (i, item) {
@@ -112,7 +112,7 @@
 							itemHTML += '<' + base.options.titleElem +
 								'><a href="' + base.options.baseURL +
 								item.event_id + '">' + item.title +
-                                '</a></' + base.options.titleElem + '>';
+								'</a></' + base.options.titleElem + '>';
 							itemHTML += '<p class="event_date">' +
 								base.parseSchedule(item.schedule) + '</p>';
 							itemHTML += '</' + base.options.elem + '>';
@@ -142,7 +142,7 @@
 							itemHTML += '<p class="location">' +
 								base.getAddress(item) + '</p>';
 							itemHTML += '<p class="summary">' + item.summary + 
-                            '</p>';
+							'</p>';
 							itemHTML += '</' + base.options.elem + '>';
 							events.push(itemHTML);
 						});
@@ -314,16 +314,16 @@
 					
 			base.getImageURL = function (item) {
 				var imgURL = "", 
-                    cal_id = item.calendar_id,
-                    imgSize = base.options.imgSize;
+					cal_id = item.calendar_id,
+					imgSize = base.options.imgSize;
 				if (item.attachments !== undefined &&
 						item.attachments[cal_id] !== undefined &&
-                        item.attachments[cal_id][imgSize] !== undefined) {
+						item.attachments[cal_id][imgSize] !== undefined) {
 					imgURL = item.attachments[cal_id][imgSize].url;
 				} else if (item.attachments !== undefined &&
 						item.attachments[
-                            item.parent_calendar_id
-                        ] !== undefined &&
+							item.parent_calendar_id
+						] !== undefined &&
 						item.attachments[
 							item.parent_calendar_id
 						][base.options.imgSize] !== undefined) {
@@ -372,9 +372,9 @@
 			imgSize: 'image',
 			categories: false,
 			jsonp: true,
-            use_cache: false,
-            cached_url: '//web-app.usc.edu/ws/url-cache/api/ecal3/',
-            api_url: '//web-app.usc.edu/ws/eo3/api/'
+			use_cache: false,
+			cached_url: '//web-app.usc.edu/ws/url-cache/api/ecal3/',
+			api_url: '//web-app.usc.edu/ws/eo3/api/'
 		};
 		
 		$.fn.uscecal = function (cal_id, options) {
