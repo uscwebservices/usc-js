@@ -62,4 +62,24 @@ harness.push({callback: function (test_label) {
 	assert.ok(context, "Should have a user context defined.");
 	harness.completed(test_label);
 }, label: "Text userContext()"});
+
+harness.push({callback: function (test_label) {
+	USC.httpGet("config.json",
+		function (error, response) {
+			var config = {};
+			assert.ok(!error, "Should not get an error: " + error);
+			assert.ok(response, "Should get some buffered data back.");
+			config = JSON.parse(response.responseText);
+			assert.ok(config, "Should have a config object.");
+			assert.ok(config.name, "Should have config.name");
+			assert.ok(config.test, "Should have config.test");
+			assert.ok(config.email, "Should have config.email");
+			assert.strictEqual(config.test, 1, "\n" + config.test + "\n" + 1);
+			assert.equal(config.name, "John Doe", "\n" + config.name + "\nJohn Doe");
+			assert.equal(config.email, "john.doe@example.com", "\n" + config.name + "\njohn.doe@example.com");
+			harness.completed(test_label);
+		});
+	
+}, label: "Test httpGet()"});
+
 harness.RunIt("usc.browser_test.js", 1000);
