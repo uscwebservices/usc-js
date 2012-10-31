@@ -29,6 +29,24 @@
 			}
 			return self.config;
 		},
+		user_context: {},
+		userContext: function (new_context) {
+			var self = this;
+			
+			if (new_context === undefined) {
+				return self.user_context;
+			}
+			
+			try {
+				Object.keys(new_context).forEach(function (ky) {
+					self.user_context[ky] = new_context[ky];
+				});
+			} catch (err) {
+				console.error(err);
+				return false;
+			}
+			return self.user_context;
+		},
 		relativeDateTime: function (date_string, seed_date) {
 			var re_relative_date = /now|[\-+0-9]+\s+(day|month|year)/i,
 				toks,

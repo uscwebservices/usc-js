@@ -56,4 +56,10 @@ harness.push({callback: function (test_label) {
 	harness.completed(test_label);
 }, label: "Test getting URL parameters"});
 
+harness.push({callback: function (test_label) {
+	var context = USC.userContext();
+	
+	assert.ok(context, "Should have a user context defined.");
+	harness.completed(test_label);
+}, label: "Text userContext()"});
 harness.RunIt("usc.browser_test.js", 1000);

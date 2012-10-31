@@ -208,4 +208,80 @@ harness.push({callback: function (test_label) {
 	harness.completed(test_label);
 }, label: "Test configure() method"});
 
-harness.RunIt(path.basename(module.filename), 1000);
+harness.push({callback: function (test_label) {
+	var context = {
+			USER_INFO: {
+				user_id: 0,
+				username: "guest",
+				name: "guest",
+				"super": 0,
+				active: 0,
+				roles: {}
+			},
+			CALENDAR_INFO: {
+				32: {
+					name: "USC Public Events",
+					description: "USC Events Calendar",
+					visible: "1",
+					allow_guest_submit: "1",
+					activity: "400",
+					categories: {
+						0: "Music",
+						1: "Theater",
+						2: "Exhibits",
+						3: "Public Lectures",
+						4: "Film",
+						5: "Sports-Interscholastic",
+						6: "Academic Lectures",
+						7: "Academic Conferences",
+						8: "Medical Lectures",
+						9: "Sports-Recreational",
+						10: "Student Sponsored Events",
+						11: "Banquets/Receptions",
+						12: "Commencement Activities",
+						13: "Festivals/Fairs",
+						14: "Webcasts",
+						15: "Ongoing"
+					}
+				}
+			},
+			APP_INFO: {
+				DOC_URL: "https://miratu.usc.edu",
+				BASE_URL: "https://miratu.usc.edu/event-calendar",
+				ALLOWED_TITLE_TAGS: "<em><i><b><u><strong>",
+				ALLOWED_DESCRIPTION_TAGS: "<p><br><i><b><u><strong><em><ol><ul><li><a>",
+				IMAGE_URL: "https://miratu.usc.edu/event-calendar/event_images",
+				ACTIVE_API: "read,manage",
+				LAUNCH_PAGE: "calendars.html"
+			}
+		},
+		initial_context = {},
+		new_context = {};
+
+	initial_context = USC.userContext();
+	assert.ok(initial_context, "Should have an initial context");
+	assert.equal(initial_context.USER_INFO, undefined, "No USER_INFO expected");
+	assert.equal(initial_context.CALENDAR_INFO, undefined, "No CALENDAR_INFO expected");
+	assert.equal(initial_context.APP_INFO, undefined, "No CALENDAR_INFO expected");
+
+	new_context = USC.userContext(context);
+	assert.ok(new_context, "Should have a new context");
+	assert.equal(typeof new_context.USER_INFO, "object", "USER_INFO expected");
+	assert.equal(typeof new_context.CALENDAR_INFO, "object", "CALENDAR_INFO expected");
+	assert.equal(typeof new_context.APP_INFO, "object", "CALENDAR_INFO expected");
+
+	assert.notEqual(new_context.USER_INFO.user_id, undefined, "\n" + new_context.USER_INFO.user_id + "\n" + context.USER_INFO.user_id);
+	assert.notEqual(new_context.USER_INFO.username, undefined, "\n" + new_context.USER_INFO.username + "\n" + context.USER_INFO.username);
+	assert.notEqual(new_context.USER_INFO["super"], undefined, "\n" + new_context.USER_INFO["super"] + "\n" + context.USER_INFO["super"]);
+	
+	assert.equal(new_context.USER_INFO.user_id, context.USER_INFO.user_id, "\n" + new_context.USER_INFO.user_id + "\n" + context.USER_INFO.user_id);
+	assert.equal(new_context.USER_INFO.username, context.USER_INFO.username, "\n" + new_context.USER_INFO.username + "\n" + context.USER_INFO.username);
+	assert.equal(new_context.USER_INFO["super"], context.USER_INFO["super"], "\n" + new_context.USER_INFO["super"] + "\n" + context.USER_INFO["super"]);
+
+	assert.equal(typeof new_context.CALENDAR_INFO["32"], typeof context.CALENDAR_INFO["32"], "Should have calendar info for 32");	
+	assert.equal(typeof new_context.CALENDAR_INFO["32"].name, typeof context.CALENDAR_INFO["32"].name, "Should have calendar info for 32.name");	
+	assert.equal(new_context.CALENDAR_INFO["32"].name, context.CALENDAR_INFO["32"].name, "\n" + new_context.CALENDAR_INFO["32"].name + "\n" + context.CALENDAR_INFO["32"].name);	
+	harness.completed(test_label);
+}, label: "Test userContext() method"});
+
+harness.RunIt(path.basename(module.filename), 750);
