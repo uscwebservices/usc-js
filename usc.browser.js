@@ -13,10 +13,9 @@
 /*global USC, jQuery */
 
 (function (global) {
-	var USC = global.USC;
-	
 	// Handing a jq object off of USC
-	USC.jq = {};
+	var jq = function () {},
+		USC = global.USC;
 	/*!
 	 * USC Events Calendar jQuery Plugin
 	 * By Cameron Bates
@@ -26,7 +25,7 @@
 	 * Version: 1.0 (October 2011)
 	 * Dual licensed under the MIT and GPL licenses.
 	 */
-	USC.jq.ecal = function ($, window) {
+	jq.ecal = function ($, window) {
 		$.uscecal = function (el, cal_id, options) {
 			var base = this;
 			base.$el = $(el);
@@ -383,4 +382,6 @@
 			});
 		};
 	};
+	
+	global.USC.jq = jq;
 }(this));
