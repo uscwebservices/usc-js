@@ -16,6 +16,45 @@
 	// Handing a jq object off of USC
 	var jq = function () {},
 		USC = global.USC;
+	
+	/**
+	 * argv() - Get the URL Query parameters and return an object
+	 * with property values decoded.
+	 * @return object with any parameters found and decoded.
+	 */
+	argv = function () {
+		var raw_search = window.location.search,
+			argv = {};
+
+		if (raw_search === "") {
+			return argv;
+		}
+		
+		if (raw_search[0] === "?") {
+			raw_search = raw_search.substr(1);
+		}
+		raw_search.split("&").forEach(function (pair) {
+			var ky, val, eq_pos;
+			
+			eq_pos = pair.indexOf('=');
+			if (eq_pos >= 0) {
+				key = pair.substr(0, eq_pos);
+				val = decodeURIComponent(
+					pair.substr(eq_pos + 1).replace(/\+/g, " "));
+				// FIXME: Would be nice to support auto-conversion
+				// to Date() when time/date is passed in.
+				if (Number(val) || val === "0") {
+					val = Number(val);
+				}
+			} else {
+				key = pair;
+				val = null;
+			}
+			argv[key] = val;
+		});
+		return argv;
+	};
+	
 	/*!
 	 * USC Events Calendar jQuery Plugin
 	 * By Cameron Bates
@@ -384,4 +423,5 @@
 	};
 	
 	global.USC.jq = jq;
+	global.USC.argv = argv;
 }(this));

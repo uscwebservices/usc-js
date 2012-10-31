@@ -43,4 +43,17 @@ harness.push({callback: function (test_label) {
 	harness.completed(test_label);
 }, label: "Test configured USC object."});
 
+harness.push({callback: function (test_label) {
+	var s,
+		expected_s;
+	
+	s = USC.argv();
+	expected_s = {test: 2};
+	console.warn("This test should fail if ?test=2 is not passed to page.");
+	assert.ok(s, "Should have an object for s");
+	assert.ok(s.test, "Should have s.test available.");
+	assert.equal(s.test, expected_s.test, "\n" + s.test + "\n" + expected_s.test);
+	harness.completed(test_label);
+}, label: "Test getting URL parameters"});
+
 harness.RunIt("usc.browser_test.js", 1000);
