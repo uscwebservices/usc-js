@@ -12,6 +12,23 @@
  sloppy: true */
 (function (global) {
 	var USC = {
+		config: {},
+		configure: function (new_config) {
+			var self = this;
+			if (new_config === undefined) {
+				return self.config;
+			}
+			
+			try {
+				Object.keys(new_config).forEach(function (ky) {
+					self.config[ky] = new_config[ky];
+				});
+			} catch (err) {
+				console.error(err);
+				return false;
+			}
+			return self.config;
+		},
 		relativeDateTime: function (date_string, seed_date) {
 			var re_relative_date = /now|[\-+0-9]+\s+(day|month|year)/i,
 				toks,
