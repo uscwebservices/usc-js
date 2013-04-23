@@ -61,24 +61,6 @@ YUI.add("usc", function (Y) {
 		if (i > -1) {
 			self.querystring = url.substr(i + 1);
 			url = url.substr(0, i);
-			/*
-			if (self.querystring.indexOf('&') > -1) {
-				params = self.querystring.split('&');
-				for (i = 0; i < params.length; i += 1) {
-					params[i] = decodeURI(params[i]);
-					j = params[i].indexOf('=');
-					if (j > -1) {
-						self.query[params[i].substr(0, j)] = params[i].substr(j + 1);
-					}
-				}
-			} else if (self.querystring.indexOf('=') > -1) {
-				params = decodeURI(self.querystring);
-				j = params.indexOf('=');
-				if (j > -1) {
-					self.query[params.substr(0, j)] = params.substr(j + 1);
-				}
-			}
-			*/
 			self.query = Y.QueryString.parse(self.querystring);
 		}
 
@@ -133,15 +115,14 @@ YUI.add("usc", function (Y) {
 	 * @method getData
 	 * @param api_uri {String} - the url to fetch
 	 * @param view_callback {Function} - the Callback to pass the data retrieved to
-	 * @param expires_in_minutes {Number} - the number of minutes before the cache is considered stale. 
+	 * @param expire_in_milliseconds {Number} - the number of milliseconds before the cache is considered stale. 
 	 */
-	function getData(api_uri, view_callback, expires_in_minutes) {
-		var item, now = new Date(), refresh_minutes = 15 * minutes;
-		
-		if (typeof expires_in_minutes !== "undefined") {
-			refresh_minutes = 1000 * 60 * expires_in_minutes;
-		} else if (expires_in_minutes === false || expires_in_minutes < 1) {
-			refresh_minutes = 0;
+	function getData(api_uri, view_callback, expire_in_milliseconds) {
+		var item, now = new Date();
+		if (typeof expire_in_milliseconds !== "undefined") {
+			expire_in_milliseconds = 1000 * 60 * 15;
+		} else if (expire_in_milliseconds === false || expire_in_milliseconds < 1) {
+			expire_in_milliseconds = 0;
 		}
 		
 		Y.log("Getting up API data", "debug");
@@ -155,11 +136,11 @@ YUI.add("usc", function (Y) {
 				return;
 			}
 			view_callback(null, items);
-			if (storageReady() === true && refresh_minutes > 0) {
-				Y.StorageLite.setItem(api_uri, {expires: (now + refresh_minutes), data: items, args: args}, true);
+			if (storageReady() === true && expire_in_milliseconds > 0) {
+				Y.StorageLite.setItem(api_uri, {expires: (now + expire_in_milliseconds), data: items, args: args}, true);
 			}
 		}
-			
+
 		function onFailure(id, response, args) {
 			view_callback({
 				toString: function () {
@@ -190,10 +171,10 @@ YUI.add("usc", function (Y) {
     }
 	
 	/**
-	 * Timie Unit is an object containing common time visions in microseconds. It
+	 * Timie Unit is an object containing common time units in milliseconds. It
 	 * also provides a simple relativeTime() method against and an initial date object.
 	 * @class TimeUnits
-	 * @property seconds (i.e. 1000 is one second)
+	 * @property seconds (i.e. 1000 milliseconds is one second)
 	 * @property minutes (i.e. 60 * seconds)
 	 * @property hours (i.e. 60 * minutes)
 	 * @property days (i.e. 24 * hours)
@@ -278,53 +259,62 @@ YUI.add("usc", function (Y) {
 	 * A data unit takes a URL data a source and applies a Handlebars template
 	 * to it updating a target CSS selector.
 	 *
-	 * @method DataUnit
-	 * @param refresh_in {Number} the number of microseconds since the Unix Epoc (i.e. how setTimeout() counts time)
+	 * @method DataUnits
+     * @property calendarAPI {String} url of cached calendar API
+     * @property newsAPI {String} url of cached news API
+     * @property expires_in_milliseconds {Number} the relative time in milliseconds to used for setting expiration
+     * @property templates {Object} key/value pairs of CSS selector as key and compiled template as value
+	 * @param expire_in_milliseconds {Number} sets the relative time in milliseconds until local cache expiration
 	 */
-	function DataUnit(refresh_in) {
+	function DataUnits(expire_in_milliseconds) {
 		Y.log("Creating DataUnit", "debug");
-		if (typeof refresh_in_minutes === "undefined") {
-			refresh_in = 15 * TimeUnits.minutes;
+		if (typeof expire_in_milliseconds === "undefined") {
+			expire_in_milliseconds = 30 * TimeUnits.minutes;
 		}
 		return {
 			calendarAPI: "http://web-app.usc.edu/ws/url-cache/api/ecal3",
 			newsAPI: "http://web-app.usc.edu/ws/url-cache/api/news",
-			refresh_in: refresh_in,
+			expire_in_milliseconds: expire_in_milliseconds,
 			templates: {},
 			/*
 			 * Get, compile the template from an HRef or CSS selector
 			 * @method getTemplate
-			 * @param {String} CSS selector pointing template. Used as key when referring to template.
+			 * @param {String} CSS selector pointing template.
 			 * @return {Function} template, results from Y.Handlebars.compile()
 			 */
 			getTemplate: function (selector) {
-				var template;
+				var template, source;
+                // Is the template already compiled?
 				if (typeof this.templates[selector] === "function") {
 					return this.templates[selector];
-				} else if (selector.indexOf("://") > -1) {
-					throw "getTemplate() from URL not implemented.";
-				}
-				
-				selector = Y.one(selector);
-				if (selector) {
-					template = Y.Handlebars.compile(selector.getHTML());
 				} else {
-					throw "Can't find selector for template";
-				}
+			        // Must have a CSS selector...
+				    selector = Y.one(selector);
+				    if (selector) {
+                        source = selector.getHTML();
+				    } else {
+					    throw "Can't find selector for template";
+				    }
+                }
 				// Save the compiled template for later				
+			    template = Y.Handlebars.compile(source);
 				this.templates[selector] = template;
 				return template;
 			},
 			
 			/*
 			 * @method: render
-			 * @param api_url {String}
-			 * @param template_selector {String}
+			 * @param api_url {String} - A data URL
+			 * @param template_selector {String} - A CSS selector
 			 * @param target_selector {String}
 			 */
-			render: function (api_url, template_selector, target_selector) {
+			render: function (api_url, template_selector, target_selector, expires_in) {
 				var template = this.getTemplate(template_selector),
 					target = Y.one(target_selector);
+
+                if (typeof expires_in !== "number") {
+                    expire_in = this.expire_in_milliseconds || (1000 * 60 * 15);
+                }
 				Y.log("Getting " + api_url, "debug");
 				getData(api_url, function (error, data) {
 					if (error) {
@@ -332,7 +322,7 @@ YUI.add("usc", function (Y) {
 					}
 					Y.log("Rendering template()", "debug");
 					target.setHTML(template({error: error || "", data: data}));
-				}, refresh_in);
+				}, expire_in);
 			}
 		};
 	}
