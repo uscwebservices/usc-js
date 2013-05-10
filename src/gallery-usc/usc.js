@@ -118,10 +118,10 @@ YUI.add("usc", function (Y) {
 	 * @param expire_in_milliseconds {Number} - the number of milliseconds before the cache is considered stale. 
 	 */
 	function getData(api_uri, view_callback, expire_in_milliseconds) {
-		var item, now = new Date();
+		var item, json, now = new Date();
 		if (typeof expire_in_milliseconds !== "undefined") {
 			expire_in_milliseconds = 1000 * 60 * 15;
-		} else if (expire_in_milliseconds === false || expire_in_milliseconds < 1) {
+		} else if (!Number(expire_in_milliseconds)) {
 			expire_in_milliseconds = 0;
 		}
 		
@@ -136,8 +136,11 @@ YUI.add("usc", function (Y) {
 				return;
 			}
 			view_callback(null, items);
-			if (storageReady() === true && expire_in_milliseconds > 0) {
-				Y.StorageLite.setItem(api_uri, {expires: (now + expire_in_milliseconds), data: items, args: args}, true);
+			if (storageReady() === true) {
+				Y.log("Storing expires " + new Date(now.valueOf() + expire_in_milliseconds), "debug");
+				Y.StorageLite.setItem(api_uri, {expires: new Date(now.valueOf() + expire_in_milliseconds), data: items, args: args}, true);
+			} else {
+				Y.log("Can't store, storage not ready");
 			}
 		}
 
@@ -152,22 +155,42 @@ YUI.add("usc", function (Y) {
 			}, null);
 		}
 		
-		if (storageReady() === true && refresh_minutes > 0) {
-			item = Y.StorageLite.getItem(api_uri);
-			if (item && refresh_minutes &&
-					typeof item.expires !== "undefined" &&
-					item.expires > now) {
-				view_callback(null, item.data);
-				return;
+		function getRemote(api_uri, onSuccess, onFailure, view_callback) {
+			if (window.navigator.onLine) {
+				Y.log("On-line", "debug");
+				Y.io(api_uri, {
+					on: {
+						success: onSuccess,
+						failure: onFailure
+					}
+				});
+			} else {
+				Y.log("Off-line", "debug");
+				view_callback("Network not available", null);
 			}
 		}
-
-		Y.io(api_uri, {
-			on: {
-				success: onSuccess,
-				failure: onFailure
+		
+		if (storageReady() === true) {
+			json = Y.StorageLite.getItem(api_uri);
+			if (json) {
+				item = JSON.parse(json);
+				item.expires = new Date(item.expires);
+				Y.log(item.expires.valueOf() + " vs (now) " + now.valueOf(), "debug");
+				if (!window.navigator.onLine || item.expires.valueOf() > now.valueOf()) {
+					Y.log("Cache hit for " + api_uri, "debug");
+					view_callback(null, item.data);
+				} else {
+					Y.log("Cache hit but stale for " + api_uri, "debug");
+					getRemote(api_uri, onSuccess, onFailure, view_callback);
+				}
+			} else {
+				Y.log("Cache hit but miss for " + api_uri, "debug");
+				getRemote(api_uri, onSuccess, onFailure, view_callback);
 			}
-		});
+		} else {
+			Y.log("Cache missing, storage not ready for " + api_uri, "debug");
+			getRemote(api_uri, onSuccess, onFailure, view_callback);
+		}
     }
 	
 	/**
@@ -313,7 +336,7 @@ YUI.add("usc", function (Y) {
 					target = Y.one(target_selector);
 
                 if (typeof expires_in !== "number") {
-                    expire_in = this.expire_in_milliseconds || (1000 * 60 * 15);
+                    expires_in = this.expire_in_milliseconds || (1000 * 60 * 15);
                 }
 				Y.log("Getting " + api_url, "debug");
 				getData(api_url, function (error, data) {
@@ -322,7 +345,7 @@ YUI.add("usc", function (Y) {
 					}
 					Y.log("Rendering template()", "debug");
 					target.setHTML(template({error: error || "", data: data}));
-				}, expire_in);
+				}, expires_in);
 			}
 		};
 	}
@@ -334,7 +357,7 @@ YUI.add("usc", function (Y) {
 	
 	
 	Y.USC.TimeUnits = TimeUnits;
-	Y.USC.DataUnit = DataUnit;
+	Y.USC.DataUnits = DataUnits;
 	Y.USC.parseUrl = parseUrl;
 	Y.USC.getData = getData;
 	Y.USC.clearData = clearData;

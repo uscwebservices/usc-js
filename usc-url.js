@@ -151,9 +151,9 @@
         };
     };
     
-    if (exports) {
+    if (typeof exports !== "undefined") {
         exports.Url = USC.Url;
     }
     GLOBAL.USC = USC;
-    return GLOBAL;
 }(this));
+
