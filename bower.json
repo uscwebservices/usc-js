@@ -1,0 +1,14 @@
+{
+  "name": "USC-js",
+  "version": "0.0.0",
+  "main": "usc.js",
+  "dependencies": {
+    "uri.js": "1.x",
+    "handlebars.js": "1.x"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ]
+}

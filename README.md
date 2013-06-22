@@ -35,24 +35,53 @@ You include the _usc.js_ file in then it should be available to use as the USC o
     <html lang="en">
     <head>
         <title>USC JavaScript object Demo</title>
-        <script rel="JavaScript" type="JavaScript" src="usc.js"></script>
     </head>
     <body>
+        <h2>Demo the USC object</h2>
+        <pre id="demo">
+        </pre>
+        <script rel="JavaScript" type="JavaScript" src="usc.js"></script>
         <script>
-            document.write("Should output today's date in a YYYY-MM-DD format.<br />");
-            document.write(USC.sqlDate(new Date()));
+            var demo = document.querySelector("#demo"),
+                output = [];
+
+            output.push("Should output today's date in a YYYY-MM-DD format.<br />");
+            output.push(USC.sqlDate(new Date()));
             
-            document.write("Plus one year.<br />");
-            document.write(USC.sqlDate("+1 year"));
+            output.push("Plus one year.<br />");
+            output.push(USC.sqlDate("+1 year"));
             
-            document.write("Calculating a URL by parts:" +
-            	USC.path.join("http://usc.edu", "ws", "eo3", "api", "help")
+            output.push("Calculating a URL by parts:" +
+                USC.path.join("http://usc.edu", "ws", "eo3", "api", "help")
             );
-            document.write("That should have read<pre>http://usc.edu/ws/eo3/api/help</pre>");
+            output.push("That should have read http://usc.edu/ws/eo3/api/help");
+
+            demo.innerHTML = output.join("\n");
         </script>
     </body>
     </html>
 ```
+
+# An alternative to USC object
+
+The state of JavaScript modules and packaging are improving.  Perhaps all we need is a
+httpGET function and a good template library that works both server and client side, e.g. Handlebars.
+
+Here are two demos build using the *httpGET* function from the *usc.browser.js* along with Handlebars
+that has been pulled in via [bower](http://bower.io) into a components directory.  In the next two demos we
+get Calendar data and Wordpress feed data respectively using this approach. While the formatting is
+primative it is only primative because of the simplifity of the template in the demo. If the template
+were appropriately designed and CSS applied it would be in-line with our standards.
+
+Demos
+
+1. [Calendar data as simple UL](demo-1.html)
+2. [Wordpress data as simple UL](demo-2.html)
+
+* [Handlebars](http://handlebarsjs.com/) is a JavaScript templating library based on extending the syntax of Mustache templates. 
+* [Bower](http://bower.io) a component package manager (e.g. for the web browser), support JavaScript, CSS and Assets
+
+
 
 
 

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Demo USC JavaScript object</title>
+    </head>
+    <body>
+        <h2>Demo USC object</h2>
+        <p>This demo shows how to use the USC object to render
+        calendar feeds via Handlebars browser based templates.</p>
+        <pre>Here's the content of the template in the script tag embedded below</pre>
+        <div id="output">The calendar content will get rendered here.</div>
+        <script id="list-template" type="application/x-handlebars-template">
+            <ul>
+            {{#data}}
+                <li>{{event_id}} {{title}} {{subtitle}} {{venue}} {{address}} {{schedule}}</li>
+            {{/data}}
+            </ul>
+        </script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.min.js"></script>
+        <script src="httpGET.js"></script>
+        <script>
+        (function (global) {
+            var httpGET = global.httpGET,
+                Handlebars = global.Handlebars,
+                src = document.querySelector("#list-template").innerHTML,
+                listTemplate = Handlebars.compile(src);
+
+            document.querySelector("pre").innerHTML = src;
+            httpGET(
+                "https://web-app.usc.edu/ws/eo3/api/highlights/32", 
+                function (err, response) {
+                    var elem, buf, data;
+                    if (err) {
+                        alert(err);
+                        return;
+                    }
+                    elem = document.querySelector("#output");
+                    if (!elem) {
+                        alert("Can't select #output");
+                        return;
+                    }
+                    buf = response.responseText;
+                    console.log("complete, response", response);// DEBUG
+                    data = JSON.parse(buf);
+                    console.log("data", buf);// DEBUG
+                    elem.innerHTML = listTemplate({data: data});
+                },
+                function (readyState, response) {
+                    console.log("progress, readyState", readyState);// DEBUG
+                    console.log("progress, response", response);// DEBUG
+                });
+        }(this));
+        </script>
+    </body>
+</html>
